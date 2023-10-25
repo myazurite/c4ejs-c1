@@ -39,7 +39,7 @@ signUp.addEventListener("click", (e) => {
             const user = userCredential.user;
             const userData = {
                 email: signUpEmail,
-                uid: user.uid,
+                userID: user.uid,
                 createdAt: date
             };
             setDoc(doc(db, 'users', user.uid), userData).then(() => {
@@ -50,6 +50,7 @@ signUp.addEventListener("click", (e) => {
             alert('User created')
         }).catch((error) => {
             console.log(error.message);
+            alert(error.message)
         }
     );
 });
@@ -79,6 +80,7 @@ onAuthStateChanged(auth, (user) => {
     //TODO Handle user login state
     let userCheck = document.getElementById('userCheck');
     if (user) {
+
     } else {
         // User is signed out
         console.log("user logged out");
@@ -86,14 +88,14 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-// signout.addEventListener("click", () => {
-//     signOut(auth).then(() => {
-//         // Sign-out successful.
-//         console.log('logged out');
-//     }).catch((error) => {
-//         console.log(error.message)
-//     });
-// })
+signout.addEventListener("click", () => {
+    signOut(auth).then(() => {
+        // Sign-out successful.
+        console.log('logged out');
+    }).catch((error) => {
+        console.log(error.message)
+    });
+})
 
 // Show or hide signup form
 signupLoginLink.forEach(link => {
