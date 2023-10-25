@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Auth</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<header class="header" id="header">
+    <nav class="navbar container">
+        <a href="#">
+            <h2 class="logo">Logo</h2>
+        </a>
+    </nav>
+</header>
+<div id="login-box">
+    <div class="form-box login">
+        <div class="form-content">
+            <h2>LOGIN</h2>
+            <div class="form">
+                <div class="input-field">
+                    <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            required
+                    >
+                    <label>Email</label>
+                </div>
+                <div class="input-field">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                    >
+                    <label>Password</label>
+                </div>
+                <button
+                    type="submit"
+                    id="signIn"
+                    name="signin_submit"
+                    value="Sign in">Log In
+                </button>
+            </div>
+            <div class="bottom-link">
+                Don't have an account?
+                <a href="#" id="signup-link">Sign Up</a>
+            </div>
+        </div>
+    </div>
+    <div class="form-box signup">
+        <div class="form-content">
+            <h2>SIGNUP</h2>
+            <div class="form">
+                <div class="input-field">
+                    <input
+                        type="text"
+                       id="signup_email"
+                       name="signup email"
+                       required
+                    >
+                    <label>Email</label>
+                </div>
+                <div class="input-field">
+                    <input
+                        type="password"
+                       id="signup_password"
+                       name="signup password"
+                       required
+                    >
+                    <label>Password</label>
+                </div>
+                <button type="submit" id="signUp" name="signup_submit" value="Sign up">Sign Up</button>
+            </div>
+            <div class="bottom-link">
+                Already have an account?
+                <a href="#" id="login-link">Log In</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<input type="submit" id="signOut" name="signout_submit" value="Sign out"/>-->
+</body>
+
+<script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
+<script type="module" src="../assets/js/firebaseConfig.js"></script>
+<script type="module" src="./index.js"></script>
+</html>

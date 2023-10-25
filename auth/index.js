@@ -1,14 +1,3 @@
-// import {initializeApp} from "firebase/app";
-// import {getDatabase, set, ref} from "firebase/database";
-// import  {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
-
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {
-    getDatabase,
-    set,
-    ref,
-    update
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -16,6 +5,8 @@ import {
     onAuthStateChanged,
     signOut,
 } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB39IBJiE4OjuhHSG2oCOob_jAROJBfudA",
@@ -29,30 +20,34 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const db = getFirestore(app);
 const auth = getAuth();
 
 let signUp = document.getElementById("signUp");
 let signIn = document.getElementById('signIn');
 let signout = document.getElementById('signOut');
+const authForm = document.getElementById('login-box');
+const signupLoginLink = document.querySelectorAll('.bottom-link a');
 
 signUp.addEventListener("click", (e) => {
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-    let username = document.getElementById("username").value;
+    let signUpEmail = document.getElementById("signup_email").value;
+    let signUpPassword = document.getElementById("signup_password").value;
+    const date = new Date();
 
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
         .then((userCredential) => {
             const user = userCredential.user;
             const userData = {
-                username: username,
-                email: email
+                email: signUpEmail,
+                uid: user.uid,
+                createdAt: date
             };
-            set(ref(database, "users/" + user.uid), userData).then(() => {
+            setDoc(doc(db, 'users', user.uid), userData).then(() => {
                 console.log("user created");
             }).catch((error) => {
                 console.log(error.message);
             });
+            alert('User created')
         }).catch((error) => {
             console.log(error.message);
         }
@@ -66,16 +61,11 @@ signIn.addEventListener("click", (e) => {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
-            signout.style.display = 'unset';
             const user = userCredential.user;
             const date = new Date();
 
-            update(ref(database, "users/" + user.uid), {
-                last_login: date,
-            })
-
             console.log('logged in');
-            window.location.href = '#';
+            window.location.href = '../index.html';
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -89,29 +79,26 @@ onAuthStateChanged(auth, (user) => {
     //TODO Handle user login state
     let userCheck = document.getElementById('userCheck');
     if (user) {
-        signIn.style.display = 'none';
-        userCheck.style.display = 'unset';
-
-        console.log(auth.currentUser)
-
-        userCheck.addEventListener("click", () => {
-            console.log("Current user:", user.username)
-        });
     } else {
         // User is signed out
         console.log("user logged out");
-        signIn.style.display = 'unset';
-        userCheck.style.display = 'none';
     }
 
 });
 
-signout.addEventListener("click", () => {
-    signOut(auth).then(() => {
-        // Sign-out successful.
-        signout.style.display = 'none';
-        console.log('logged out');
-    }).catch((error) => {
-        console.log(error.message)
+// signout.addEventListener("click", () => {
+//     signOut(auth).then(() => {
+//         // Sign-out successful.
+//         console.log('logged out');
+//     }).catch((error) => {
+//         console.log(error.message)
+//     });
+// })
+
+// Show or hide signup form
+signupLoginLink.forEach(link => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        authForm.classList[link.id === 'signup-link' ? 'add' : 'remove']("show-signup");
     });
-})
+});
